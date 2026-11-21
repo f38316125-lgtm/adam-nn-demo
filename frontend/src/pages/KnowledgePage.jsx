@@ -43,8 +43,8 @@ export default function KnowledgePage() {
           subtitle="Envie manuais, contratos, apostilas e planilhas. Em toda conversa o Adam busca os trechos mais relevantes e responde com base neles, citando a fonte." />
 
         <button onClick={() => ref.current?.click()} disabled={busy} data-testid="kb-upload-button"
-          className="w-full flex flex-col items-center gap-2 py-10 rounded-2xl border border-dashed border-white/15 hover:border-[#F4A261]/50 hover:bg-white/[0.02] transition-colors mb-8">
-          {busy ? <Loader2 className="w-6 h-6 animate-spin text-[#F4A261]" /> : <Upload className="w-6 h-6 text-[#F4A261]" />}
+          className="w-full flex flex-col items-center gap-2 py-10 rounded-2xl border border-dashed border-white/15 hover:border-white/20 hover:bg-white/[0.02] transition-colors mb-8">
+          {busy ? <Loader2 className="w-6 h-6 animate-spin text-zinc-100" /> : <Upload className="w-6 h-6 text-zinc-100" />}
           <span className="text-sm">{busy ? "Indexando…" : "Clique para enviar documentos"}</span>
           <span className="text-xs text-zinc-500">PDF, DOCX, XLSX, TXT, MD, CSV, código · até 20 MB</span>
         </button>
@@ -55,7 +55,7 @@ export default function KnowledgePage() {
           {docs.length === 0 && <p className="text-sm text-zinc-500">Nenhum documento ainda.</p>}
           {docs.map((d) => (
             <div key={d.id} className="flex items-center gap-3 p-4 rounded-xl bg-white/[0.025] border border-white/[0.07]" data-testid={`kb-doc-${d.id}`}>
-              <BookOpen className="w-5 h-5 text-[#F4A261] shrink-0" />
+              <BookOpen className="w-5 h-5 text-zinc-100 shrink-0" />
               <div className="min-w-0 flex-1">
                 <p className="text-sm truncate">{d.name}</p>
                 <p className="text-xs text-zinc-500">{d.chunks} trechos · {d.chars.toLocaleString("pt-BR")} caracteres</p>
@@ -67,12 +67,12 @@ export default function KnowledgePage() {
 
         <form onSubmit={search} className="flex gap-2 mb-4">
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Teste a busca: o que o Adam encontraria?" data-testid="kb-search-input"
-            className="flex-1 px-4 py-3 rounded-xl bg-[#12141D] border border-white/10 outline-none focus:border-[#F4A261]/50 text-sm" />
+            className="flex-1 px-4 py-3 rounded-xl bg-[#2A2A2A] border border-white/10 outline-none focus:border-white/20 text-sm" />
           <button data-testid="kb-search-button" className="px-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10"><Search className="w-4 h-4" /></button>
         </form>
         {hits && (hits.length === 0 ? <p className="text-sm text-zinc-500">Nada encontrado.</p> : hits.map((h, i) => (
-          <div key={i} className="p-4 rounded-xl bg-[#12141D] border border-white/[0.07] mb-2" data-testid="kb-search-hit">
-            <p className="text-[11px] font-mono text-[#F4A261] mb-1">{h.name} · relevância {h.score.toFixed(2)}</p>
+          <div key={i} className="p-4 rounded-xl bg-[#2A2A2A] border border-white/[0.07] mb-2" data-testid="kb-search-hit">
+            <p className="text-[11px] font-mono text-zinc-100 mb-1">{h.name} · relevância {h.score.toFixed(2)}</p>
             <p className="text-sm text-zinc-300 whitespace-pre-wrap line-clamp-5">{h.text}</p>
           </div>
         )))}

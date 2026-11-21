@@ -59,15 +59,15 @@ export default function ApiPage() {
 
         <form onSubmit={create} className="flex flex-col sm:flex-row gap-2 mb-4">
           <input data-testid="api-key-name-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome da chave (ex: Plugin do site)"
-            className="flex-1 px-4 py-3 rounded-xl bg-[#12141D] border border-white/10 outline-none focus:border-[#F4A261]/50 text-sm" />
-          <button data-testid="api-create-key-button" className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#F4A261] to-[#E07A5F] text-sm font-medium hover:opacity-90">
+            className="flex-1 px-4 py-3 rounded-xl bg-[#2A2A2A] border border-white/10 outline-none focus:border-white/20 text-sm" />
+          <button data-testid="api-create-key-button" className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors">
             <KeyRound className="w-4 h-4" /> Gerar nova chave
           </button>
         </form>
 
         {fresh && (
-          <div className="mb-6 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 rise" data-testid="api-new-key-box">
-            <p className="text-xs text-emerald-300 mb-2">Copie agora — esta chave não será mostrada novamente.</p>
+          <div className="mb-6 p-4 rounded-xl border border-white/20 bg-white/[0.06] rise" data-testid="api-new-key-box">
+            <p className="text-xs text-zinc-100 mb-2">Copie agora — esta chave não será mostrada novamente.</p>
             <div className="flex items-center gap-3">
               <code className="flex-1 text-sm font-mono break-all" data-testid="api-new-key-value">{fresh}</code>
               <Copyable text={fresh} testid="api-new-key-copy" />
@@ -90,7 +90,7 @@ export default function ApiPage() {
           ))}
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-[#0c0d14] overflow-hidden">
+        <div className="rounded-2xl border border-white/10 bg-[#0D0D0D] overflow-hidden">
           <div className="flex items-center gap-1 px-3 py-2 border-b border-white/5 bg-white/[0.03]">
             {Object.keys(examples("")).map((t) => (
               <button key={t} onClick={() => setTab(t)} data-testid={`api-example-tab-${t.toLowerCase()}`}
@@ -101,8 +101,8 @@ export default function ApiPage() {
           <pre className="p-5 text-[13px] font-mono text-zinc-200 overflow-x-auto scroll-thin">{code}</pre>
         </div>
         <div className="mt-6 text-sm text-zinc-400 space-y-1.5">
-          <p><code className="text-[#F4A261]">POST /api/v1/chat</code> — corpo: <code>message</code>, <code>conversation_id</code> (opcional, continua uma conversa), <code>engine</code>: pro | neural | local.</p>
-          <p>Resposta: <code>reply</code>, <code>conversation_id</code> e <code>files</code> (baixe com <code className="text-[#F4A261]">GET /api/v1/files/&#123;id&#125;</code>).</p>
+          <p><code className="text-zinc-100">POST /api/v1/chat</code> — corpo: <code>message</code>, <code>conversation_id</code> (opcional, continua uma conversa), <code>engine</code>: pro | neural | local.</p>
+          <p>Resposta: <code>reply</code>, <code>conversation_id</code> e <code>files</code> (baixe com <code className="text-zinc-100">GET /api/v1/files/&#123;id&#125;</code>).</p>
         </div>
       </div>
     </div>

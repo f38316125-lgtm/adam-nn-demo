@@ -8,13 +8,13 @@ import { useArtifact } from "@/lib/artifact";
 
 const TYPES = {
   pdf: { icon: FileText, badge: "PDF", cls: "text-rose-400 bg-rose-500/10 border-rose-500/20" },
-  docx: { icon: FileSpreadsheet, badge: "Word", cls: "text-blue-400 bg-blue-500/10 border-blue-500/20" },
-  xlsx: { icon: Table, badge: "Excel", cls: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
-  csv: { icon: Table, badge: "CSV", cls: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
-  html: { icon: Monitor, badge: "Site", cls: "text-orange-300 bg-orange-500/10 border-orange-500/20" },
-  htm: { icon: Monitor, badge: "Site", cls: "text-orange-300 bg-orange-500/10 border-orange-500/20" },
-  image: { icon: ImageIcon, badge: "Imagem", cls: "text-sky-400 bg-sky-500/10 border-sky-500/20" },
-  code: { icon: Code2, badge: "Código", cls: "text-amber-400 bg-amber-500/10 border-amber-500/20" },
+  docx: { icon: FileSpreadsheet, badge: "Word", cls: "text-zinc-300 bg-white/[0.06] border-white/20" },
+  xlsx: { icon: Table, badge: "Excel", cls: "text-zinc-300 bg-white/[0.06] border-white/20" },
+  csv: { icon: Table, badge: "CSV", cls: "text-zinc-300 bg-white/[0.06] border-white/20" },
+  html: { icon: Monitor, badge: "Site", cls: "text-zinc-100 bg-white/[0.06] border-white/20" },
+  htm: { icon: Monitor, badge: "Site", cls: "text-zinc-100 bg-white/[0.06] border-white/20" },
+  image: { icon: ImageIcon, badge: "Imagem", cls: "text-zinc-300 bg-white/[0.06] border-white/20" },
+  code: { icon: Code2, badge: "Código", cls: "text-zinc-300 bg-white/[0.06] border-white/20" },
 };
 const BINARY = ["pdf", "docx", "xlsx"];
 
@@ -48,8 +48,8 @@ export function GeneratedImage({ file }) {
   return (
     <div className="relative group rounded-2xl overflow-hidden border border-white/10 my-3 max-w-md rise" data-testid={`generated-image-${file.id}`}>
       {url ? <img src={url} alt={file.prompt || file.name} className="w-full h-auto block" />
-        : <div className="aspect-square bg-gradient-to-br from-white/5 to-white/[0.02] animate-pulse flex items-center justify-center text-xs text-zinc-500">Carregando imagem…</div>}
-      <div className="absolute inset-x-0 bottom-0 p-3 flex items-center justify-between bg-gradient-to-t from-black/80 to-transparent opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+        : <div className="aspect-square bg-white/5 animate-pulse flex items-center justify-center text-xs text-zinc-500">Carregando imagem…</div>}
+      <div className="absolute inset-x-0 bottom-0 p-3 flex items-center justify-between bg-black/70 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
         <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-300">Gerado por Adam Vision</span>
         <button onClick={() => downloadFile(api, file)} data-testid="generated-image-download" className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20">
           <Download className="w-4 h-4" />
@@ -77,8 +77,8 @@ export function FileCard({ file }) {
           <p className="text-xs text-zinc-500">{t.badge} · {fmtSize(file.size)}</p>
         </div>
         <div className="flex flex-wrap gap-1.5">
-          {isHtml && artifact && <button onClick={() => artifact.open({ file })} data-testid="file-preview-panel-button" className={`${btn} border-[#F4A261]/40 text-amber-200`}><Eye className="w-3.5 h-3.5" /> Pré-visualização</button>}
-          {isHtml && <button onClick={() => openShared(api, file.id)} data-testid="file-open-browser-button" className={`${btn} border-[#2A9D8F]/40 text-emerald-200 hover:bg-[#2A9D8F]/20`}><ExternalLink className="w-3.5 h-3.5" /> Abrir no navegador</button>}
+          {isHtml && artifact && <button onClick={() => artifact.open({ file })} data-testid="file-preview-panel-button" className={`${btn} border-white/20 text-zinc-100`}><Eye className="w-3.5 h-3.5" /> Pré-visualização</button>}
+          {isHtml && <button onClick={() => openShared(api, file.id)} data-testid="file-open-browser-button" className={`${btn} border-white/20 text-zinc-100 hover:bg-white/[0.06]`}><ExternalLink className="w-3.5 h-3.5" /> Abrir no navegador</button>}
           {!BINARY.includes(kind) && <button onClick={() => setGh(true)} data-testid="file-github-button" className={btn}><Github className="w-3.5 h-3.5" /> GitHub</button>}
           <button onClick={() => downloadFile(api, file)} data-testid="generated-file-card-download" className={btn}><Download className="w-3.5 h-3.5" /> Baixar</button>
         </div>
@@ -118,7 +118,7 @@ function SitePreview({ file }) {
   return (
     <div className="rounded-xl border border-white/10 overflow-hidden mt-2 mb-2" data-testid={`site-preview-${file.id}`}>
       <div className="flex items-center gap-1.5 px-3 py-2 bg-white/[0.04] border-b border-white/5 text-xs">
-        <span className="flex gap-1.5 mr-2"><i className="w-2.5 h-2.5 rounded-full bg-rose-400/70" /><i className="w-2.5 h-2.5 rounded-full bg-amber-400/70" /><i className="w-2.5 h-2.5 rounded-full bg-emerald-400/70" /></span>
+        <span className="flex gap-1.5 mr-2"><i className="w-2.5 h-2.5 rounded-full bg-rose-400/70" /><i className="w-2.5 h-2.5 rounded-full bg-white/[0.06]" /><i className="w-2.5 h-2.5 rounded-full bg-white/[0.06]" /></span>
         <button onClick={() => setTab("preview")} data-testid="site-tab-preview" className={tabCls("preview")}><Eye className="w-3.5 h-3.5" /> Prévia</button>
         <button onClick={() => setTab("code")} data-testid="site-tab-code" className={tabCls("code")}><Code2 className="w-3.5 h-3.5" /> Código</button>
         <span className="flex-1" />
@@ -131,10 +131,10 @@ function SitePreview({ file }) {
       </div>
       {html === null && <div className="h-40 animate-pulse bg-white/[0.02]" />}
       {html === "" && <p className="p-4 text-xs text-zinc-500">Não consegui carregar a prévia. Use “Abrir no navegador”.</p>}
-      {html && tab === "preview" && <div className="bg-[#0c0d14] p-2"><SiteFrame html={html} mobile={mobile} height={460} name={file.name} /></div>}
-      {html && tab === "code" && <pre className="p-4 max-h-[460px] overflow-auto scroll-thin text-[12.5px] leading-relaxed text-zinc-200 bg-[#0c0d14]" data-testid="site-code-view"><code>{html}</code></pre>}
+      {html && tab === "preview" && <div className="bg-[#0D0D0D] p-2"><SiteFrame html={html} mobile={mobile} height={460} name={file.name} /></div>}
+      {html && tab === "code" && <pre className="p-4 max-h-[460px] overflow-auto scroll-thin text-[12.5px] leading-relaxed text-zinc-200 bg-[#0D0D0D]" data-testid="site-code-view"><code>{html}</code></pre>}
       <Dialog open={full} onOpenChange={setFull}>
-        <DialogContent className="max-w-[96vw] w-[96vw] h-[92vh] p-3 bg-[#0c0d14] border-white/10 flex flex-col">
+        <DialogContent className="max-w-[96vw] w-[96vw] h-[92vh] p-3 bg-[#0D0D0D] border-white/10 flex flex-col">
           <DialogTitle className="text-sm font-mono text-zinc-400">{file.name}</DialogTitle>
           <div className="flex-1 min-h-0">{html && <SiteFrame html={html} mobile={mobile} height="100%" name={file.name} />}</div>
         </DialogContent>

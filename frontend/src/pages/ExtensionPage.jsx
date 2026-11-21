@@ -38,14 +38,14 @@ export default function ExtensionPage() {
         <PageHeader eyebrow="Edge Agent · Chrome" title="O Adam no controle do seu navegador"
           subtitle="Uma extensão do Chrome que deixa o Adam ver a aba atual, clicar, digitar e navegar para cumprir suas tarefas, sempre com a sua permissão.">
           <button onClick={download} data-testid="extension-download-button"
-            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#F4A261] to-[#E07A5F] text-sm font-medium hover:opacity-90">
+            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors">
             <Download className="w-4 h-4" /> Baixar extensão
           </button>
         </PageHeader>
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-12">
           {CAPS.map(({ icon: Icon, t, d }) => (
             <div key={t} className="p-5 rounded-xl bg-white/[0.025] border border-white/[0.07]">
-              <Icon className="w-5 h-5 text-[#F4A261] mb-3" />
+              <Icon className="w-5 h-5 text-zinc-100 mb-3" />
               <p className="font-display">{t}</p>
               <p className="text-xs text-zinc-500 mt-1 leading-relaxed">{d}</p>
             </div>
@@ -54,8 +54,8 @@ export default function ExtensionPage() {
         <h2 className="font-display text-xl mb-5">Como instalar</h2>
         <ol className="space-y-3" data-testid="extension-steps">
           {STEPS.map((s, i) => (
-            <li key={i} className="flex gap-4 p-4 rounded-xl bg-[#12141D] border border-white/[0.07]">
-              <span className="font-mono text-sm text-[#F4A261] w-6 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+            <li key={i} className="flex gap-4 p-4 rounded-xl bg-[#2A2A2A] border border-white/[0.07]">
+              <span className="font-mono text-sm text-zinc-100 w-6 shrink-0">{String(i + 1).padStart(2, "0")}</span>
               <span className="text-sm text-zinc-300">{s}</span>
             </li>
           ))}

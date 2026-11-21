@@ -116,19 +116,17 @@ export default function CallMode({ onSend, onClose }) {
   };
 
   const scale = 1 + Math.min(level * 6, 0.6);
-  const color = status === "speaking" ? "#F4A261" : status === "thinking" ? "#8338EC" : "#E07A5F";
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[#06070B]/95 backdrop-blur-2xl flex flex-col items-center justify-between py-16 px-6 rise" data-testid="call-mode-overlay">
+    <div className="fixed inset-0 z-[100] bg-[#171717]/95 backdrop-blur-2xl flex flex-col items-center justify-between py-16 px-6 rise" data-testid="call-mode-overlay">
       <div className="text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.3em] text-zinc-500">Em ligação com</p>
+        <p className="text-sm text-zinc-500">Em ligação com</p>
         <p className="font-display text-3xl sm:text-4xl font-semibold tracking-[0.2em] mt-2">ADAM</p>
       </div>
       <div className="flex flex-col items-center gap-10">
         <div className="relative w-56 h-56 flex items-center justify-center">
-          <div className="absolute inset-0 rounded-full blur-3xl opacity-40 transition-transform duration-100" style={{ background: color, transform: `scale(${scale})` }} />
-          <div className={`relative w-40 h-40 rounded-full transition-transform duration-100 ${status === "thinking" ? "animate-pulse" : ""}`}
-            style={{ background: `radial-gradient(circle at 35% 30%, #fff8, ${color} 45%, #3A86FF 120%)`, transform: `scale(${status === "speaking" ? 1.05 : scale})` }} />
+          <div className={`relative w-36 h-36 rounded-full bg-[#ECECEC] transition-transform duration-100 ${status === "thinking" ? "animate-pulse" : ""}`}
+            style={{ transform: `scale(${status === "speaking" ? 1.05 : scale})` }} />
         </div>
         <p className="font-mono text-sm text-zinc-300" data-testid="call-mode-status">{err || STATUS[status]}</p>
         <div className="max-w-xl text-center space-y-3 min-h-24">

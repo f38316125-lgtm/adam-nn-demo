@@ -5,21 +5,21 @@ import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { errMsg, useApi } from "@/lib/api";
 
-const field = "w-full px-3 py-2.5 rounded-lg bg-[#181A26] border border-white/10 outline-none focus:border-[#F4A261]/50 text-sm";
+const field = "w-full px-3 py-2.5 rounded-lg bg-[#303030] border border-white/10 outline-none focus:border-white/20 text-sm";
 const slug = (n) => n.replace(/\.[^.]+$/, "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9._-]+/g, "-").replace(/^-+|-+$/g, "") || "meu-site";
 
 function ResultLinks({ r }) {
   const links = [["Repositório", r.repo_url], ["Commit", r.commit_url], ["Arquivo", r.file_url], ["Site no ar (GitHub Pages)", r.pages_url]].filter(([, u]) => u);
   return (
     <div className="space-y-2" data-testid="github-push-result">
-      <p className="text-sm text-emerald-300">{r.created ? "Repositório criado e commit enviado." : "Commit enviado."}</p>
+      <p className="text-sm text-zinc-100">{r.created ? "Repositório criado e commit enviado." : "Commit enviado."}</p>
       {links.map(([l, u]) => (
         <a key={l} href={u} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-zinc-300 hover:text-white" data-testid={`github-result-${l.split(" ")[0].toLowerCase()}`}>
-          <ExternalLink className="w-3.5 h-3.5 text-[#F4A261]" /> {l}
+          <ExternalLink className="w-3.5 h-3.5 text-zinc-100" /> {l}
         </a>
       ))}
       {r.pages_url && <p className="text-xs text-zinc-500">O GitHub Pages pode levar 1–2 minutos para publicar.</p>}
-      {r.pages_error && <p className="text-xs text-amber-300">{r.pages_error}</p>}
+      {r.pages_error && <p className="text-xs text-zinc-100">{r.pages_error}</p>}
     </div>
   );
 }
@@ -44,13 +44,13 @@ export default function GithubPushDialog({ file, open, onOpenChange }) {
 
   return (
     <Dialog open={open} onOpenChange={(v) => { onOpenChange(v); if (!v) setResult(null); }}>
-      <DialogContent className="bg-[#12141D] border-white/10 max-w-md" data-testid="github-push-dialog">
+      <DialogContent className="bg-[#2A2A2A] border-white/10 max-w-md" data-testid="github-push-dialog">
         <DialogTitle className="flex items-center gap-2 font-display"><Github className="w-4 h-4" /> Enviar para o GitHub</DialogTitle>
         <DialogDescription className="text-zinc-500 text-xs">{file.name}</DialogDescription>
         {!status && <Loader2 className="w-4 h-4 animate-spin text-zinc-500" />}
         {status && !status.connected && (
           <p className="text-sm text-zinc-400" data-testid="github-not-connected">
-            Conecte sua conta do GitHub primeiro em <Link to="/configuracoes" onClick={() => onOpenChange(false)} className="text-[#F4A261] underline">Configurações</Link>.
+            Conecte sua conta do GitHub primeiro em <Link to="/configuracoes" onClick={() => onOpenChange(false)} className="text-zinc-100 underline">Configurações</Link>.
           </p>
         )}
         {status?.connected && (result ? <ResultLinks r={result} /> : (
@@ -70,7 +70,7 @@ export default function GithubPushDialog({ file, open, onOpenChange }) {
             </div>
             <label className="flex items-center gap-2 text-sm text-zinc-300"><input type="checkbox" checked={f.private} onChange={set("private")} data-testid="github-private-checkbox" /> Repositório privado (se for criado agora)</label>
             {isHtml && <label className="flex items-center gap-2 text-sm text-zinc-300"><input type="checkbox" checked={f.pages} onChange={set("pages")} data-testid="github-pages-checkbox" /> Publicar o site no GitHub Pages</label>}
-            <button disabled={busy} data-testid="github-push-submit" className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#F4A261] to-[#E07A5F] text-sm font-medium disabled:opacity-60">
+            <button disabled={busy} data-testid="github-push-submit" className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white text-black text-sm font-medium disabled:opacity-60">
               {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Github className="w-4 h-4" />} {busy ? "Enviando…" : "Fazer commit e push"}
             </button>
           </form>

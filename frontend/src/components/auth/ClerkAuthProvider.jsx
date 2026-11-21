@@ -8,11 +8,11 @@ const appearance = {
   theme: dark,
   captcha: { theme: "dark" },
   variables: {
-    colorPrimary: "#E07A5F",
-    colorPrimaryForeground: "#ffffff",
-    colorBackground: "#12141D",
-    colorInput: "#181A26",
-    fontFamily: "IBM Plex Sans, sans-serif",
+    colorPrimary: "#ECECEC",
+    colorPrimaryForeground: "#0D0D0D",
+    colorBackground: "#2F2F2F",
+    colorInput: "#303030",
+    fontFamily: "Geist, sans-serif",
     borderRadius: "0.75rem",
   },
 };

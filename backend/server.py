@@ -189,6 +189,8 @@ class CodeStartIn(BaseModel):
     task: str = Field(min_length=1, max_length=20000)
     context: str = Field(default="", max_length=60000)
     session_id: Optional[str] = None
+    system: str = Field(default="", max_length=20000)
+    tools: list = Field(default_factory=list, max_length=60)
 
 
 class V1ChatIn(BaseModel):
@@ -1370,7 +1372,7 @@ async def code_start(body: CodeStartIn, request: Request):
     mems = await db.memories.find({"user_id": user["user_id"]}, {"_id": 0, "fact": 1}).to_list(30)
     ctx = ("\n\nFatos sobre o usuário:\n" + "\n".join(f"- {m['fact']}" for m in mems)) if mems else ""
     try:
-        return await code_agent.start(LLM_KEY, PRO_MODEL, user["user_id"], body.task, body.context, body.session_id, ctx)
+        return await code_agent.start(LLM_KEY, PRO_MODEL, user["user_id"], body.task, body.context, body.session_id, ctx, body.system, body.tools)
     except Exception as e:
         logger.exception("code agent start failed")
         raise HTTPException(502, f"Falha no agente: {str(e)[:200]}")

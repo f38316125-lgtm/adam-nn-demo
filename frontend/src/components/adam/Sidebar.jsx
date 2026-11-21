@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
-import { UserButton, useUser } from "@clerk/react";
-import { Activity, BookOpen, Brain, Chrome, Code, Cpu, FolderOpen, KeyRound, Plus, Search, SlidersHorizontal, SquareTerminal, Trash2, X } from "lucide-react";
+import { useClerk, useUser } from "@clerk/react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Activity, BookOpen, Brain, Chrome, Code, Cpu, FolderOpen, KeyRound, LogOut, Plus, Search, SlidersHorizontal, SquarePen, SquareTerminal, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { useAdam } from "@/lib/adamContext";
 import { ENGINES, useApi } from "@/lib/api";
@@ -11,6 +12,8 @@ const NAV = [
   { to: "/conhecimento", label: "Base de Conhecimento", icon: BookOpen, id: "knowledge" },
   { to: "/arquivos", label: "Arquivos e Sites", icon: FolderOpen, id: "files" },
   { to: "/laboratorio", label: "Laboratório Neural", icon: Activity, id: "lab" },
+];
+const MORE = [
   { to: "/vscode", label: "Extensão VS Code", icon: SquareTerminal, id: "vscode" },
   { to: "/extensao", label: "Extensão Chrome", icon: Chrome, id: "extension" },
   { to: "/widget", label: "Widget para Sites", icon: Code, id: "widget" },
@@ -33,7 +36,7 @@ function Highlight({ text, q }) {
   if (!q) return text;
   const i = text.toLowerCase().indexOf(q.toLowerCase());
   if (i < 0) return text;
-  return <>{text.slice(0, i)}<mark className="bg-[#F4A261]/30 text-amber-100 rounded px-0.5">{text.slice(i, i + q.length)}</mark>{text.slice(i + q.length)}</>;
+  return <>{text.slice(0, i)}<mark className="bg-white/[0.06] text-zinc-100 rounded px-0.5">{text.slice(i, i + q.length)}</mark>{text.slice(i + q.length)}</>;
 }
 
 function ConversationItem({ c, active, onNavigate, q }) {
@@ -49,8 +52,7 @@ function ConversationItem({ c, active, onNavigate, q }) {
   };
   return (
     <Link to={`/chat/${c.id}`} onClick={onNavigate} data-testid={`conversation-item-${c.id}`}
-      className={`group flex items-start gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${active ? "bg-white/[0.07] text-white" : "text-zinc-400 hover:bg-white/[0.04] hover:text-zinc-200"}`}>
-      <span className="w-1.5 h-1.5 mt-[7px] rounded-full shrink-0" style={{ background: (ENGINES[c.engine] || ENGINES.pro).dot }} />
+      className={`group flex items-start gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${active ? "bg-[#2F2F2F] text-white" : "text-zinc-300 hover:bg-[#262626] hover:text-white"}`}>
       <span className="flex-1 min-w-0">
         <span className="block truncate"><Highlight text={c.title} q={q} /></span>
         {c.snippet && <span className="block text-[11px] text-zinc-500 line-clamp-2 mt-0.5"><Highlight text={c.snippet} q={q} /></span>}
@@ -63,15 +65,15 @@ function ConversationItem({ c, active, onNavigate, q }) {
 }
 
 function Filters({ f, setF }) {
-  const chip = (on) => `px-2 py-1 rounded-md text-[11px] border transition-colors ${on ? "border-[#F4A261]/60 bg-[#F4A261]/10 text-amber-200" : "border-white/10 text-zinc-400 hover:text-zinc-200"}`;
+  const chip = (on) => `px-2 py-1 rounded-md text-[11px] border transition-colors ${on ? "border-white/20 bg-white/[0.06] text-zinc-100" : "border-white/10 text-zinc-400 hover:text-zinc-200"}`;
   return (
     <div className="mt-2 p-3 rounded-xl bg-white/[0.03] border border-white/10 space-y-3 rise" data-testid="history-filters">
       <div>
-        <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1.5">Período</p>
+        <p className="text-xs font-medium text-zinc-500 mb-1.5">Período</p>
         <div className="flex flex-wrap gap-1">{PERIODS.map(([k, l]) => <button key={k} onClick={() => setF({ ...f, period: k })} data-testid={`history-period-${k}`} className={chip(f.period === k)}>{l}</button>)}</div>
       </div>
       <div>
-        <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1.5">Motor</p>
+        <p className="text-xs font-medium text-zinc-500 mb-1.5">Motor</p>
         <div className="flex flex-wrap gap-1">
           <button onClick={() => setF({ ...f, engine: "" })} data-testid="history-engine-all" className={chip(!f.engine)}>Todos</button>
           {Object.entries(ENGINES).map(([k, e]) => <button key={k} onClick={() => setF({ ...f, engine: k })} data-testid={`history-engine-${k}`} className={chip(f.engine === k)}>{e.label}</button>)}
@@ -116,30 +118,30 @@ function History({ onNavigate }) {
 
   return (
     <div className="flex-1 min-h-0 flex flex-col">
-      <div className="px-3 pt-3">
-        <div className="flex items-center justify-between px-2 mb-2">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">Histórico</p>
-          <span className="font-mono text-[10px] text-zinc-600" data-testid="history-count">{active ? `${list.length} resultado(s)` : conversations.length}</span>
+      <div className="px-2 pt-4">
+        <div className="flex items-center justify-between px-3 mb-2">
+          <p className="text-xs font-medium text-zinc-500">Histórico</p>
+          <span className="text-xs text-zinc-600" data-testid="history-count">{active ? `${list.length} resultado(s)` : conversations.length}</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/10 focus-within:border-[#F4A261]/50">
+          <div className="flex-1 min-w-0 flex items-center gap-2 px-3 py-2 rounded-lg bg-[#212121] border border-white/[0.08] focus-within:border-white/20">
             <Search className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar conversas…" data-testid="history-search-input"
               className="flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-zinc-600" />
             {q && <button onClick={() => setQ("")} data-testid="history-search-clear" className="text-zinc-500 hover:text-white"><X className="w-3.5 h-3.5" /></button>}
           </div>
           <button onClick={() => setShowFilters(!showFilters)} data-testid="history-filters-toggle" title="Busca avançada"
-            className={`p-2 rounded-lg border transition-colors ${showFilters || f.period !== "all" || f.engine ? "border-[#F4A261]/60 text-[#F4A261] bg-[#F4A261]/10" : "border-white/10 text-zinc-400 hover:text-white"}`}>
+            className={`p-2 rounded-lg border transition-colors ${showFilters || f.period !== "all" || f.engine ? "border-white/20 text-zinc-100 bg-white/[0.06]" : "border-white/10 text-zinc-400 hover:text-white"}`}>
             <SlidersHorizontal className="w-4 h-4" />
           </button>
         </div>
         {showFilters && <Filters f={f} setF={setF} />}
       </div>
-      <div className="flex-1 min-h-0 overflow-y-auto scroll-history px-3 pt-2 pb-3" data-testid="conversation-list">
+      <div className="flex-1 min-h-0 overflow-y-auto scroll-history px-2 pt-2 pb-3" data-testid="conversation-list">
         {list.length === 0 && <p className="px-3 py-4 text-xs text-zinc-600">{active ? "Nenhuma conversa encontrada." : "Nenhuma conversa ainda."}</p>}
         {groups.map(([label, items]) => (
           <div key={label} className="mb-2">
-            <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider text-zinc-600 first-letter:uppercase">{label}</p>
+            <p className="px-3 pt-2 pb-1 text-xs font-medium text-zinc-500 first-letter:uppercase">{label}</p>
             <div className="space-y-0.5">{items.map((c) => <ConversationItem key={c.id} c={c} active={c.id === id} onNavigate={onNavigate} q={q.trim()} />)}</div>
           </div>
         ))}
@@ -148,41 +150,69 @@ function History({ onNavigate }) {
   );
 }
 
-export default function Sidebar({ onNavigate }) {
+function NavItem({ to, label, icon: Icon, id, onNavigate }) {
+  return (
+    <NavLink to={to} onClick={onNavigate} data-testid={`sidebar-${id}-link`}
+      className={({ isActive }) => `flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${isActive ? "bg-[#2F2F2F] text-white" : "text-zinc-300 hover:bg-[#262626] hover:text-white"}`}>
+      <Icon className="w-4 h-4 text-zinc-400" /> {label}
+    </NavLink>
+  );
+}
+
+function UserFooter({ onNavigate }) {
   const { user } = useUser();
+  const { signOut } = useClerk();
+  const navigate = useNavigate();
+  const name = user?.fullName || user?.primaryEmailAddress?.emailAddress;
+  const logout = () => signOut({ redirectUrl: "/sign-in" });
+  return (
+    <div className="p-2 border-t border-white/[0.06]" data-testid="sidebar-user">
+      <DropdownMenu>
+        <DropdownMenuTrigger data-testid="sidebar-user-menu" className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[#262626] outline-none transition-colors text-left">
+          {user?.imageUrl ? <img src={user.imageUrl} alt="" className="w-8 h-8 rounded-full" /> : <span className="w-8 h-8 rounded-full bg-[#2F2F2F]" />}
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm truncate">{name}</span>
+            <span className="block text-xs text-zinc-500 truncate">{user?.fullName ? user?.primaryEmailAddress?.emailAddress : "Conta Adam"}</span>
+          </span>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="top" align="start" className="w-64 bg-[#2F2F2F] border-white/10 rounded-xl p-1.5">
+          {MORE.map(({ to, label, icon: Icon, id }) => (
+            <DropdownMenuItem key={to} data-testid={`sidebar-${id}-link`} onClick={() => { navigate(to); onNavigate?.(); }}
+              className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm text-zinc-200 focus:bg-white/[0.06]">
+              <Icon className="w-4 h-4 text-zinc-400" /> {label}
+            </DropdownMenuItem>
+          ))}
+          <DropdownMenuSeparator className="bg-white/10" />
+          <DropdownMenuItem onClick={logout} data-testid="sidebar-logout-menu-item" className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm text-zinc-200 focus:bg-white/[0.06]">
+            <LogOut className="w-4 h-4 text-zinc-400" /> Sair
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <button onClick={logout} data-testid="sidebar-logout-button"
+        className="mt-1 w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-zinc-400 hover:bg-[#262626] hover:text-white transition-colors">
+        <LogOut className="w-4 h-4" /> Sair
+      </button>
+    </div>
+  );
+}
+
+export default function Sidebar({ onNavigate }) {
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="px-5 pt-5 pb-3">
-        <div className="flex items-center gap-2.5">
-          <span className="w-2 h-2 rounded-full bg-[#F4A261] pulse-node" />
-          <span className="font-display text-lg font-semibold tracking-[0.3em]">ADAM</span>
-          <span className="ml-auto font-mono text-[10px] text-zinc-600">BH-BR v1.0</span>
-        </div>
-        <p className="text-[11px] text-zinc-600 mt-1">por Felipe Hudson</p>
-      </div>
-      <div className="px-3">
-        <Link to="/" onClick={onNavigate} data-testid="new-chat-button"
-          className="flex items-center gap-2 w-full px-3 py-2.5 rounded-xl border border-white/10 text-sm hover:border-[#E07A5F]/60 hover:bg-[#E07A5F]/5 transition-colors">
-          <Plus className="w-4 h-4 text-[#F4A261]" /> Nova conversa
+      <div className="px-3 pt-3 pb-1 flex items-center justify-between">
+        <Link to="/" onClick={onNavigate} className="px-2 py-1.5 text-[17px] font-semibold tracking-tight" data-testid="sidebar-logo">Adam</Link>
+        <Link to="/" onClick={onNavigate} title="Nova conversa" data-testid="new-chat-icon-button" className="p-2 rounded-lg text-zinc-400 hover:bg-[#262626] hover:text-white transition-colors">
+          <SquarePen className="w-[18px] h-[18px]" />
         </Link>
       </div>
-      <nav className="px-3 mt-3 grid grid-cols-5 gap-1" data-testid="sidebar-nav">
-        {NAV.map(({ to, label, icon: Icon, id: nid }) => (
-          <NavLink key={to} to={to} onClick={onNavigate} data-testid={`sidebar-${nid}-link`} title={label} aria-label={label}
-            className={({ isActive }) => `flex items-center justify-center h-10 rounded-lg transition-colors ${isActive ? "text-[#F4A261] bg-white/[0.07]" : "text-zinc-500 hover:text-zinc-200 hover:bg-white/[0.04]"}`}>
-            <Icon className="w-[18px] h-[18px]" />
-          </NavLink>
-        ))}
+      <nav className="px-2 mt-1 space-y-0.5" data-testid="sidebar-nav">
+        <Link to="/" onClick={onNavigate} data-testid="new-chat-button" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-zinc-300 hover:bg-[#262626] hover:text-white transition-colors">
+          <Plus className="w-4 h-4 text-zinc-400" /> Nova conversa
+        </Link>
+        {NAV.map((n) => <NavItem key={n.to} {...n} onNavigate={onNavigate} />)}
       </nav>
-      <div className="mx-3 mt-3 border-t border-white/5" />
       <History onNavigate={onNavigate} />
-      <div className="border-t border-white/5 p-4 flex items-center gap-3" data-testid="sidebar-user">
-        <UserButton />
-        <div className="min-w-0">
-          <p className="text-sm truncate">{user?.fullName || user?.primaryEmailAddress?.emailAddress}</p>
-          <p className="text-[11px] text-zinc-500 truncate">{user?.fullName ? user?.primaryEmailAddress?.emailAddress : "Conta Adam"}</p>
-        </div>
-      </div>
+      <UserFooter onNavigate={onNavigate} />
     </div>
   );
 }

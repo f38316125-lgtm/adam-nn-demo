@@ -35,7 +35,7 @@ function HtmlActions({ code }) {
     <button onClick={open} data-testid="code-open-browser-button" className="flex items-center gap-1 hover:text-white"><ExternalLink className="w-3.5 h-3.5" />Abrir</button>
     <button onClick={github} data-testid="code-github-button" className="flex items-center gap-1 hover:text-white"><Github className="w-3.5 h-3.5" />GitHub</button>
     <Dialog open={preview} onOpenChange={setPreview}>
-      <DialogContent className="max-w-[96vw] w-[96vw] h-[92vh] p-3 bg-[#0c0d14] border-white/10 flex flex-col">
+      <DialogContent className="max-w-[96vw] w-[96vw] h-[92vh] p-3 bg-[#0D0D0D] border-white/10 flex flex-col">
         <DialogTitle className="text-sm font-mono text-zinc-400">Prévia do site</DialogTitle>
         <div className="flex-1 min-h-0"><SiteFrame html={code} height="100%" name="Prévia" /></div>
       </DialogContent>
@@ -54,7 +54,7 @@ function CodeBlock({ lang, code }) {
   };
   const isHtml = lang === "html" || /^\s*<!doctype html/i.test(code);
   return (
-    <div className="rounded-xl overflow-hidden border border-white/10 bg-[#0c0d14] my-3">
+    <div className="rounded-xl overflow-hidden border border-white/10 bg-[#0D0D0D] my-3">
       <div className="flex items-center justify-between px-4 py-2 bg-white/[0.04] border-b border-white/5 text-xs text-zinc-400 font-mono">
         <span>{lang || "código"}</span>
         <div className="flex flex-wrap gap-3">
@@ -80,14 +80,14 @@ function SiteCard({ code, index }) {
   const active = artifact.current?.messageId === m.id && artifact.current?.index === index;
   const lines = code.split("\n").length;
   return (
-    <div className={`my-3 flex items-center gap-3 p-3.5 rounded-xl border transition-colors ${active ? "border-[#F4A261]/50 bg-[#F4A261]/[0.06]" : "border-white/10 bg-white/[0.03] hover:border-white/20"}`} data-testid={`site-card-${index}`}>
-      <div className="p-2.5 rounded-lg border text-orange-300 bg-orange-500/10 border-orange-500/20">{building ? <Loader2 className="w-5 h-5 animate-spin" /> : <Monitor className="w-5 h-5" />}</div>
+    <div className={`my-3 flex items-center gap-3 p-3.5 rounded-xl border transition-colors ${active ? "border-white/20 bg-white/[0.06]" : "border-white/10 bg-white/[0.03] hover:border-white/20"}`} data-testid={`site-card-${index}`}>
+      <div className="p-2.5 rounded-lg border text-zinc-100 bg-white/[0.06] border-white/20">{building ? <Loader2 className="w-5 h-5 animate-spin" /> : <Monitor className="w-5 h-5" />}</div>
       <div className="min-w-0 flex-1">
         <p className="text-sm text-white truncate">{siteTitle(code)}</p>
-        <p className="text-xs text-zinc-500" data-testid="site-card-status">{building ? <span className="text-[#F4A261]">Construindo ao vivo… {lines} linhas</span> : `Site · ${lines} linhas`}</p>
+        <p className="text-xs text-zinc-500" data-testid="site-card-status">{building ? <span className="text-zinc-100">Construindo ao vivo… {lines} linhas</span> : `Site · ${lines} linhas`}</p>
       </div>
       <button onClick={() => artifact.open({ messageId: m.id, index })} data-testid="site-card-preview-button"
-        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-gradient-to-r from-[#F4A261] to-[#E07A5F] text-white hover:opacity-90">
+        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-white text-black hover:bg-zinc-200 transition-colors">
         <Eye className="w-3.5 h-3.5" /> Pré-visualização
       </button>
     </div>
@@ -141,7 +141,7 @@ function SpeakButton({ m }) {
   };
   return (
     <button onClick={toggle} data-testid="message-speak-button" title={active ? "Parar" : "Ouvir resposta"}
-      className="mt-2 inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-[#F4A261] transition-colors">
+      className="mt-2 inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-100 transition-colors">
       {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : active ? <Square className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
       {active ? "Parar" : "Ouvir"}
     </button>
@@ -155,7 +155,7 @@ function LinkList({ links }) {
         const k = LINK_KIND[l.kind] || LINK_KIND.read;
         const Icon = k.icon;
         if (l.kind === "kb") return (
-          <span key={i} data-testid={`message-link-kb-${i}`} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#F4A261]/25 bg-[#F4A261]/5 text-xs text-amber-200">
+          <span key={i} data-testid={`message-link-kb-${i}`} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/20 bg-white/[0.06] text-xs text-zinc-100">
             <Icon className="w-3.5 h-3.5" /><span className="text-zinc-500">{k.label}</span><span className="truncate max-w-[12rem]">{l.title}</span>
           </span>
         );
@@ -163,7 +163,7 @@ function LinkList({ links }) {
         try { host = new URL(l.url).hostname.replace("www.", ""); } catch {}
         return (
           <a key={i} href={l.url} target="_blank" rel="noopener noreferrer" data-testid={`message-link-${l.kind}-${i}`}
-            className={`group inline-flex items-center gap-2 max-w-xs px-3 py-1.5 rounded-lg border text-xs transition-colors ${l.kind === "open" ? "border-[#2A9D8F]/40 bg-[#2A9D8F]/10 text-emerald-200 hover:bg-[#2A9D8F]/20" : "border-white/10 bg-white/[0.03] text-zinc-300 hover:border-white/20"}`}>
+            className={`group inline-flex items-center gap-2 max-w-xs px-3 py-1.5 rounded-lg border text-xs transition-colors ${l.kind === "open" ? "border-white/20 bg-white/[0.06] text-zinc-100 hover:bg-white/[0.06]" : "border-white/10 bg-white/[0.03] text-zinc-300 hover:border-white/20"}`}>
             <Icon className="w-3.5 h-3.5 shrink-0" />
             <span className="text-zinc-500 shrink-0">{k.label}</span>
             <span className="truncate">{l.kind === "search" ? l.title.replace("Pesquisa: ", "") : host}</span>
@@ -180,20 +180,17 @@ export default function MessageBubble({ m, streaming }) {
     return (
       <div className="flex flex-col items-end gap-2 rise" data-testid="message-user">
         {m.attachments?.length > 0 && <div className="flex flex-wrap gap-2 justify-end">{m.attachments.map((f) => <Attachment key={f.id} f={f} />)}</div>}
-        <div className="max-w-[85%] px-4 py-2.5 rounded-2xl rounded-br-md bg-[#181A26] border border-white/5 text-[0.95rem] whitespace-pre-wrap break-words">{m.content}</div>
+        <div className="max-w-[80%] px-5 py-2.5 rounded-3xl bg-[#303030] text-[0.975rem] leading-relaxed whitespace-pre-wrap break-words">{m.content}</div>
       </div>
     );
   }
   const eng = ENGINES[m.engine] || ENGINES.pro;
   return (
     <div className="flex gap-3 sm:gap-4 rise" data-testid="message-assistant">
-      <div className="w-7 h-7 shrink-0 rounded-lg bg-gradient-to-br from-[#E07A5F] to-[#3A86FF] flex items-center justify-center font-display text-xs font-bold">A</div>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-sm font-medium">Adam</span>
-          <span className={`text-[10px] px-1.5 py-0.5 rounded border ${eng.cls}`}>{eng.label}</span>
-        </div>
-        {m.tool && streaming && <p className="text-xs font-mono text-[#F4A261] animate-pulse mb-1" data-testid="tool-status">{m.tool}…</p>}
+      <div className="w-7 h-7 shrink-0 rounded-full border border-white/15 flex items-center justify-center text-xs font-semibold text-zinc-200">A</div>
+      <div className="min-w-0 flex-1 pt-0.5">
+        {m.engine && m.engine !== "pro" && <p className="text-xs text-zinc-500 mb-1">{eng.label}</p>}
+        {m.tool && streaming && <p className="text-xs font-mono text-zinc-100 animate-pulse mb-1" data-testid="tool-status">{m.tool}…</p>}
         {!m.content && streaming && !m.tool && <p className="text-xs font-mono text-zinc-500 animate-pulse">Pensando…</p>}
         <div className={`prose-adam ${streaming ? "caret" : ""}`}>
           <MsgCtx.Provider value={{ m, streaming }}>

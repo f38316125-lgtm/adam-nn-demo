@@ -4,8 +4,8 @@ import { toast } from "sonner";
 import { BACKEND_URL, errMsg, useApi } from "@/lib/api";
 import PageHeader from "@/components/adam/PageHeader";
 
-const field = "w-full px-3 py-2.5 rounded-lg bg-[#181A26] border border-white/10 outline-none focus:border-[#F4A261]/50 text-sm";
-const EMPTY = { name: "", title: "Adam", greeting: "Olá! Sou o Adam. Como posso ajudar?", color: "#E07A5F", allowed_origins: "", use_kb: false };
+const field = "w-full px-3 py-2.5 rounded-lg bg-[#303030] border border-white/10 outline-none focus:border-white/20 text-sm";
+const EMPTY = { name: "", title: "Adam", greeting: "Olá! Sou o Adam. Como posso ajudar?", color: "#ECECEC", allowed_origins: "", use_kb: false };
 const snippet = (k) => `<script src="${BACKEND_URL}/api/widget.js" data-key="${k}" async></script>`;
 
 function CopyBtn({ text, testid }) {
@@ -37,7 +37,7 @@ export default function WidgetPage() {
         <PageHeader eyebrow="Plugin · Uma linha de código" title="O Adam em qualquer site"
           subtitle="Crie um widget de chat e cole o código no HTML do seu site (WordPress, Wix, Shopify, React…). Visitantes conversam com o Adam sem acessar suas memórias ou conversas." />
 
-        <form onSubmit={create} className="grid sm:grid-cols-2 gap-4 p-6 rounded-2xl bg-[#12141D] border border-white/[0.07] mb-10">
+        <form onSubmit={create} className="grid sm:grid-cols-2 gap-4 p-6 rounded-2xl bg-[#2A2A2A] border border-white/[0.07] mb-10">
           <div><label className="text-xs text-zinc-400">Nome interno</label><input className={`${field} mt-1`} value={form.name} onChange={set("name")} placeholder="Site da padaria" data-testid="widget-name-input" /></div>
           <div><label className="text-xs text-zinc-400">Título no chat</label><input className={`${field} mt-1`} value={form.title} onChange={set("title")} data-testid="widget-title-input" /></div>
           <div className="sm:col-span-2"><label className="text-xs text-zinc-400">Mensagem de boas-vindas</label><input className={`${field} mt-1`} value={form.greeting} onChange={set("greeting")} data-testid="widget-greeting-input" /></div>
@@ -46,7 +46,7 @@ export default function WidgetPage() {
             <label className="flex items-center gap-2 text-xs text-zinc-400">Cor <input type="color" value={form.color} onChange={set("color")} className="w-9 h-9 rounded bg-transparent" data-testid="widget-color-input" /></label>
             <label className="flex items-center gap-2 text-xs text-zinc-300"><input type="checkbox" checked={form.use_kb} onChange={set("use_kb")} data-testid="widget-kb-checkbox" /> Responder com minha Base de Conhecimento</label>
           </div>
-          <button data-testid="widget-create-button" className="sm:col-span-2 flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-[#F4A261] to-[#E07A5F] text-sm font-medium hover:opacity-90">
+          <button data-testid="widget-create-button" className="sm:col-span-2 flex items-center justify-center gap-2 py-3 rounded-xl bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors">
             <Plus className="w-4 h-4" /> Criar widget
           </button>
         </form>
@@ -61,7 +61,7 @@ export default function WidgetPage() {
                 <span className="text-xs text-zinc-500">“{w.title}” · {w.messages} mensagens{w.use_kb ? " · usa base de conhecimento" : ""}</span>
                 <button onClick={() => del(w.id)} data-testid="widget-delete-button" className="ml-auto text-zinc-500 hover:text-rose-400"><Trash2 className="w-4 h-4" /></button>
               </div>
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-[#0c0d14] border border-white/10">
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-[#0D0D0D] border border-white/10">
                 <code className="flex-1 text-xs font-mono text-zinc-300 break-all" data-testid="widget-snippet">{snippet(w.public_key)}</code>
                 <CopyBtn text={snippet(w.public_key)} testid="widget-snippet-copy" />
               </div>

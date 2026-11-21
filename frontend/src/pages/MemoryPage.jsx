@@ -28,11 +28,11 @@ export default function MemoryPage() {
           subtitle="Fatos e preferências usados em todas as conversas. O Adam também salva memórias sozinho quando você conta algo importante." />
         <form onSubmit={add} className="flex flex-col sm:flex-row gap-2 mb-8">
           <input data-testid="memory-fact-input" value={fact} onChange={(e) => setFact(e.target.value)} placeholder="Ex: Prefiro respostas curtas e com exemplos em Python"
-            className="flex-1 px-4 py-3 rounded-xl bg-[#12141D] border border-white/10 outline-none focus:border-[#F4A261]/50 text-sm" />
-          <select data-testid="memory-tag-select" value={tag} onChange={(e) => setTag(e.target.value)} className="px-3 py-3 rounded-xl bg-[#12141D] border border-white/10 text-sm">
+            className="flex-1 px-4 py-3 rounded-xl bg-[#2A2A2A] border border-white/10 outline-none focus:border-white/20 text-sm" />
+          <select data-testid="memory-tag-select" value={tag} onChange={(e) => setTag(e.target.value)} className="px-3 py-3 rounded-xl bg-[#2A2A2A] border border-white/10 text-sm">
             {["geral", "preferencia", "projeto", "pessoal", "tecnologia"].map((t) => <option key={t}>{t}</option>)}
           </select>
-          <button data-testid="memory-add-button" className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#F4A261] to-[#E07A5F] text-sm font-medium hover:opacity-90 transition-opacity">
+          <button data-testid="memory-add-button" className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors transition-opacity">
             <Plus className="w-4 h-4" /> Adicionar
           </button>
         </form>
@@ -43,7 +43,7 @@ export default function MemoryPage() {
             <div key={m.id} data-testid="memory-item-card" className="group p-4 rounded-xl bg-white/[0.025] border border-white/[0.07] hover:border-white/15 transition-colors rise">
               <p className="text-sm text-zinc-200 leading-relaxed">{m.fact}</p>
               <div className="flex items-center gap-2 mt-4">
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#E07A5F]/10 text-[#F4A261] border border-[#E07A5F]/20">#{m.tag}</span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.06] text-zinc-100 border border-white/20">#{m.tag}</span>
                 <span className="text-[10px] text-zinc-600">{m.source === "adam" ? "salva pelo Adam" : "manual"} · {new Date(m.created_at).toLocaleDateString("pt-BR")}</span>
                 <button onClick={() => del(m.id)} data-testid="memory-delete-button" className="ml-auto text-zinc-600 hover:text-rose-400 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
               </div>

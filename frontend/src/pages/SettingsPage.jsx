@@ -5,7 +5,7 @@ import { errMsg, useApi } from "@/lib/api";
 import PageHeader from "@/components/adam/PageHeader";
 import { useAdam } from "@/lib/adamContext";
 
-const field = "w-full px-4 py-3 rounded-xl bg-[#181A26] border border-white/10 outline-none focus:border-[#F4A261]/50 text-sm";
+const field = "w-full px-4 py-3 rounded-xl bg-[#303030] border border-white/10 outline-none focus:border-white/20 text-sm";
 const VOICES = [["onyx", "grave e firme"], ["echo", "suave e calma"], ["ash", "clara"], ["sage", "sábia"], ["alloy", "neutra"], ["coral", "calorosa"], ["nova", "enérgica"], ["shimmer", "alegre"], ["fable", "expressiva"]];
 
 function BrazilianVoices({ current, onPicked }) {
@@ -14,7 +14,7 @@ function BrazilianVoices({ current, onPicked }) {
   const [busy, setBusy] = useState(null);
   useEffect(() => { api.get("/voice/eleven/voices").then((r) => setData(r.data)).catch((e) => setData({ enabled: true, voices: [], error: errMsg(e) })); }, [api]);
   if (!data) return <p className="text-xs text-zinc-500 mb-4">Carregando vozes brasileiras…</p>;
-  if (!data.enabled) return <p className="text-xs text-amber-300 mb-4" data-testid="eleven-missing-key">Chave da ElevenLabs ainda não configurada — usando a voz OpenAI enquanto isso.</p>;
+  if (!data.enabled) return <p className="text-xs text-zinc-100 mb-4" data-testid="eleven-missing-key">Chave da ElevenLabs ainda não configurada — usando a voz OpenAI enquanto isso.</p>;
   if (data.error) return <p className="text-xs text-rose-300 mb-4">{data.error}</p>;
   const pick = async (v) => {
     setBusy(v.voice_id);
@@ -25,7 +25,7 @@ function BrazilianVoices({ current, onPicked }) {
   return (
     <div className="grid sm:grid-cols-2 gap-2 mb-4 max-h-80 overflow-y-auto scroll-thin pr-1" data-testid="eleven-voice-list">
       {data.voices.map((v) => (
-        <div key={v.voice_id} className={`p-3 rounded-xl border ${current === v.voice_id ? "border-[#F4A261]/60 bg-[#F4A261]/5" : "border-white/10 bg-white/[0.02]"}`}>
+        <div key={v.voice_id} className={`p-3 rounded-xl border ${current === v.voice_id ? "border-white/20 bg-white/[0.06]" : "border-white/10 bg-white/[0.02]"}`}>
           <div className="flex items-center gap-2">
             <p className="text-sm truncate flex-1">{v.name}</p>
             <span className="text-[10px] text-zinc-500">{v.gender === "male" ? "masc." : v.gender === "female" ? "fem." : ""} {v.age || ""}</span>
@@ -34,7 +34,7 @@ function BrazilianVoices({ current, onPicked }) {
           <div className="flex items-center gap-2 mt-2">
             {v.preview_url && <button type="button" onClick={() => new Audio(v.preview_url).play()} data-testid={`eleven-preview-${v.voice_id}`} className="text-xs px-2 py-1 rounded bg-white/5 hover:bg-white/10">▶ Ouvir</button>}
             <button type="button" onClick={() => pick(v)} disabled={busy === v.voice_id} data-testid={`eleven-pick-${v.voice_id}`}
-              className="text-xs px-2 py-1 rounded bg-[#E07A5F]/20 text-amber-200 hover:bg-[#E07A5F]/30 disabled:opacity-50">{current === v.voice_id ? "Selecionada" : busy === v.voice_id ? "…" : "Usar esta"}</button>
+              className="text-xs px-2 py-1 rounded bg-white/[0.06] text-zinc-100 hover:bg-white/[0.06] disabled:opacity-50">{current === v.voice_id ? "Selecionada" : busy === v.voice_id ? "…" : "Usar esta"}</button>
           </div>
         </div>
       ))}
@@ -56,12 +56,12 @@ function GithubConnect() {
   };
   const disconnect = async () => { const { data } = await api.delete("/github/token"); setSt(data); toast.success("GitHub desconectado"); };
   return (
-    <section className="p-6 rounded-2xl bg-[#12141D] border border-white/[0.07] mb-5" data-testid="settings-github-section">
+    <section className="p-6 rounded-2xl bg-[#2A2A2A] border border-white/[0.07] mb-5" data-testid="settings-github-section">
       <h2 className="font-display text-lg flex items-center gap-2"><Github className="w-4 h-4" /> GitHub</h2>
       <p className="text-sm text-zinc-500 mt-1 mb-4">Conecte para o Adam criar repositórios, fazer commit/push dos sites e arquivos gerados e publicar no GitHub Pages.</p>
       {st?.connected ? (
         <div className="flex items-center gap-3">
-          <p className="text-sm text-emerald-300 flex-1" data-testid="github-connected-login">Conectado como <b>{st.login}</b></p>
+          <p className="text-sm text-zinc-100 flex-1" data-testid="github-connected-login">Conectado como <b>{st.login}</b></p>
           <button onClick={disconnect} data-testid="github-disconnect-button" className="text-xs px-3 py-2 rounded-lg border border-white/10 text-rose-300 hover:bg-rose-500/10">Desconectar</button>
         </div>
       ) : (<>
@@ -70,7 +70,7 @@ function GithubConnect() {
           <button onClick={connect} disabled={busy || token.length < 10} data-testid="github-connect-button" className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-sm disabled:opacity-50 shrink-0">{busy ? "Conectando…" : "Conectar"}</button>
         </div>
         <p className="text-xs text-zinc-500 mt-2">
-          Crie em <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=Adam" target="_blank" rel="noopener noreferrer" className="text-[#F4A261] underline">github.com/settings/tokens</a> com o escopo <code>repo</code>. O token fica salvo só na sua conta do Adam.
+          Crie em <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=Adam" target="_blank" rel="noopener noreferrer" className="text-zinc-100 underline">github.com/settings/tokens</a> com o escopo <code>repo</code>. O token fica salvo só na sua conta do Adam.
         </p>
       </>)}
     </section>
@@ -93,7 +93,7 @@ export default function SettingsPage() {
       <div className="max-w-3xl mx-auto px-5 sm:px-8 py-14">
         <PageHeader eyebrow="Configurações & Motores" title="Como o Adam pensa" />
 
-        <section className="p-6 rounded-2xl bg-[#12141D] border border-white/[0.07] mb-5">
+        <section className="p-6 rounded-2xl bg-[#2A2A2A] border border-white/[0.07] mb-5">
           <h2 className="font-display text-lg">Servidor local (Ollama)</h2>
           <p className="text-sm text-zinc-500 mt-1 mb-5">Rode um modelo aberto (Llama, Qwen, Gemma) no seu servidor com GPU e conecte aqui. O motor "Servidor Local" usará este endereço — sem nenhuma API de terceiros.</p>
           <label className="text-xs text-zinc-400">URL do servidor</label>
@@ -102,15 +102,15 @@ export default function SettingsPage() {
           <input data-testid="settings-ollama-model-input" className={`${field} mt-1.5`} value={s.ollama_model} onChange={set("ollama_model")} placeholder="llama3.1, qwen2.5, gemma2…" />
         </section>
 
-        <section className="p-6 rounded-2xl bg-[#12141D] border border-white/[0.07] mb-5">
+        <section className="p-6 rounded-2xl bg-[#2A2A2A] border border-white/[0.07] mb-5">
           <h2 className="font-display text-lg">Estilo de resposta</h2>
           <p className="text-sm text-zinc-500 mt-1 mb-4">Instrução aplicada em todas as conversas.</p>
           <textarea data-testid="settings-style-input" rows={3} className={field} value={s.response_style} onChange={set("response_style")} placeholder="Ex: Seja direto, use exemplos práticos e emojis com moderação." />
         </section>
 
-        <section className="p-6 rounded-2xl bg-[#12141D] border border-white/[0.07] mb-5">
+        <section className="p-6 rounded-2xl bg-[#2A2A2A] border border-white/[0.07] mb-5">
           <h2 className="font-display text-lg">Voz do Adam</h2>
-          <p className="text-sm text-zinc-500 mt-1 mb-4">Fale pelo microfone ou use “Ligar” no chat. Quando você fala, o Adam responde falando.</p>
+          <p className="text-sm text-zinc-500 mt-1 mb-4">Fale pelo microfone ou use “Voz” no chat. Quando você fala, o Adam responde falando.</p>
           <label className="text-xs text-zinc-400">Motor de voz</label>
           <select data-testid="settings-voice-provider" className={`${field} mt-1.5 mb-4`} value={s.voice_provider || "elevenlabs"} onChange={set("voice_provider")}>
             <option value="elevenlabs">ElevenLabs — sotaque brasileiro natural</option>
@@ -129,7 +129,7 @@ export default function SettingsPage() {
 
         <GithubConnect />
 
-        <section className="p-6 rounded-2xl bg-[#12141D] border border-white/[0.07] mb-5">
+        <section className="p-6 rounded-2xl bg-[#2A2A2A] border border-white/[0.07] mb-5">
           <h2 className="font-display text-lg">Aprendizado contínuo</h2>
           <label className="flex items-start gap-3 text-sm text-zinc-300 mt-3">
             <input type="checkbox" className="mt-1" checked={s.neural_learning !== false} onChange={(e) => setS({ ...s, neural_learning: e.target.checked })} data-testid="settings-neural-learning" />
@@ -138,14 +138,14 @@ export default function SettingsPage() {
           </label>
         </section>
 
-        <button onClick={save} data-testid="settings-save-button" className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#F4A261] to-[#E07A5F] text-sm font-medium hover:opacity-90">
+        <button onClick={save} data-testid="settings-save-button" className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors">
           <Save className="w-4 h-4" /> Salvar
         </button>
 
         <section className="mt-12 relative overflow-hidden rounded-2xl border border-white/[0.07]">
           <img src="https://images.unsplash.com/photo-1543958871-ccfa180a0c39?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200" alt="Belo Horizonte" className="absolute inset-0 w-full h-full object-cover opacity-25" />
-          <div className="relative p-6 bg-gradient-to-r from-[#090A0F] to-transparent">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">Sobre</p>
+          <div className="relative p-6 bg-[#212121]/85">
+            <p className="text-xs font-medium text-zinc-500">Sobre</p>
             <p className="font-display text-xl mt-2">Adam foi criado por Felipe Hudson</p>
             <p className="text-sm text-zinc-400 mt-1">19 anos · Belo Horizonte, Minas Gerais, Brasil</p>
           </div>

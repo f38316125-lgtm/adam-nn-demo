@@ -35,16 +35,13 @@ async function readSSE(res, onEvent) {
 
 function Empty({ onPick }) {
   return (
-    <div className="flex-1 flex flex-col justify-center max-w-3xl w-full mx-auto px-5 py-10">
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500 mb-4 rise">Adam · IA própria</p>
-      <h1 className="font-display text-4xl sm:text-5xl font-semibold tracking-tight leading-tight rise" style={{ animationDelay: "60ms" }}>
-        Olá. Em que vamos <span className="adam-gradient-text">trabalhar</span> hoje?
-      </h1>
-      <div className="grid sm:grid-cols-2 gap-2.5 mt-10">
+    <div className="flex-1 flex flex-col justify-center items-center max-w-3xl w-full mx-auto px-5 py-10">
+      <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-center rise">Em que vamos trabalhar hoje?</h1>
+      <div className="grid sm:grid-cols-2 gap-2 mt-10 w-full">
         {SUGGESTIONS.map(({ icon: Icon, text }, i) => (
-          <button key={text} onClick={() => onPick(text)} data-testid={`suggestion-${i}`} style={{ animationDelay: `${120 + i * 60}ms` }}
-            className="rise text-left flex gap-3 p-4 rounded-xl border border-white/[0.07] bg-white/[0.02] hover:border-[#E07A5F]/40 hover:bg-white/[0.04] transition-colors text-sm text-zinc-300">
-            <Icon className="w-4 h-4 mt-0.5 text-[#F4A261] shrink-0" /> {text}
+          <button key={text} onClick={() => onPick(text)} data-testid={`suggestion-${i}`} style={{ animationDelay: `${80 + i * 50}ms` }}
+            className="rise text-left flex gap-3 p-4 rounded-2xl border border-white/10 hover:bg-white/[0.04] transition-colors text-sm text-zinc-400 hover:text-zinc-200">
+            <Icon className="w-4 h-4 mt-0.5 text-zinc-500 shrink-0" /> {text}
           </button>
         ))}
       </div>
@@ -164,13 +161,13 @@ export default function ChatPage() {
     <div className="flex h-full min-h-0">
     <div className="flex flex-col flex-1 min-w-0 h-full min-h-0">
       {calling && <CallMode onSend={(t) => sendRef.current(t, [], "call")} onClose={() => setCalling(false)} />}
-      <header className="h-14 shrink-0 pl-14 md:pl-6 pr-4 border-b border-white/5 bg-[#090A0F]/80 backdrop-blur-xl flex items-center gap-4 z-20">
+      <header className="h-14 shrink-0 pl-14 md:pl-3 pr-3 bg-[#212121] flex items-center gap-3 z-20">
         <EngineSelect />
-        <p className="text-sm text-zinc-400 truncate flex-1" data-testid="chat-title">{title}</p>
-        {busy && <span className="text-[11px] font-mono text-[#F4A261] animate-pulse" data-testid="chat-streaming-indicator">gerando…</span>}
-        <button onClick={() => setCalling(true)} data-testid="call-mode-start-button" title="Ligar para o Adam"
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-xs hover:bg-emerald-500/20 transition-colors">
-          <Phone className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Ligar</span>
+        <p className="text-sm text-zinc-500 truncate flex-1" data-testid="chat-title">{title}</p>
+        {busy && <span className="text-xs text-zinc-500" data-testid="chat-streaming-indicator">Gerando…</span>}
+        <button onClick={() => setCalling(true)} data-testid="call-mode-start-button" title="Conversa por voz"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-zinc-300 hover:bg-white/[0.06] hover:text-white transition-colors">
+          <Phone className="w-4 h-4" /> <span className="hidden sm:inline">Voz</span>
         </button>
       </header>
       <div className="flex-1 overflow-y-auto scroll-thin flex flex-col" data-testid="chat-messages">

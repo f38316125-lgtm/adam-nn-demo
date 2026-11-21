@@ -8,7 +8,7 @@ import PageHeader from "@/components/adam/PageHeader";
 function Metric({ label, value, testid }) {
   return (
     <div className="p-4 rounded-xl bg-white/[0.025] border border-white/[0.07]">
-      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500">{label}</p>
+      <p className="text-xs font-medium text-zinc-500">{label}</p>
       <p className="font-display text-xl mt-1.5" data-testid={testid}>{value}</p>
     </div>
   );
@@ -56,9 +56,9 @@ export default function LabPage() {
         <PageHeader eyebrow="Laboratório Neural · PyTorch" title="AdamNano — Transformer próprio, do zero"
           subtitle="Arquitetura decoder-only escrita à mão com atenção causal, tokenizer próprio de caracteres e treino por previsão do próximo token. Pequena de propósito: é a semente da Versão 3 do Adam." />
 
-        <div className="flex flex-wrap items-center gap-3 mb-6 px-4 py-3 rounded-xl border border-purple-500/25 bg-purple-500/5 text-sm" data-testid="lab-autolearn-status">
-          <span className="w-2 h-2 rounded-full bg-purple-400 pulse-node" />
-          <span className="text-purple-200">Aprendizado contínuo ativo</span>
+        <div className="flex flex-wrap items-center gap-3 mb-6 px-4 py-3 rounded-xl border border-white/20 bg-white/[0.06] text-sm" data-testid="lab-autolearn-status">
+          <span className="w-2 h-2 rounded-full bg-zinc-200" />
+          <span className="text-zinc-100">Aprendizado contínuo ativo</span>
           <span className="text-zinc-500 text-xs">{s.pending_examples} novos exemplos na fila · treina sozinho a cada 5 min · {s.last_autolearn ? `último aprendizado ${new Date(s.last_autolearn).toLocaleString("pt-BR")}` : "aguardando primeiro ciclo"}</span>
         </div>
 
@@ -72,56 +72,56 @@ export default function LabPage() {
         </div>
 
         <div className="grid lg:grid-cols-5 gap-5">
-          <section className="lg:col-span-3 p-5 rounded-2xl bg-[#12141D] border border-white/[0.07]">
+          <section className="lg:col-span-3 p-5 rounded-2xl bg-[#2A2A2A] border border-white/[0.07]">
             <div className="flex flex-wrap items-center gap-3 mb-4">
               <h2 className="font-display text-lg">Curva de loss</h2>
               <span className="font-mono text-xs text-zinc-500" data-testid="lab-last-loss">{s.last_loss != null ? `última: ${s.last_loss}` : "sem treino ainda"}</span>
               <div className="ml-auto flex items-center gap-2">
-                <select data-testid="lab-steps-select" value={steps} onChange={(e) => setSteps(+e.target.value)} className="px-2 py-1.5 rounded-lg bg-[#181A26] border border-white/10 text-xs">
+                <select data-testid="lab-steps-select" value={steps} onChange={(e) => setSteps(+e.target.value)} className="px-2 py-1.5 rounded-lg bg-[#303030] border border-white/10 text-xs">
                   {[100, 200, 500, 1000].map((n) => <option key={n} value={n}>{n} passos</option>)}
                 </select>
                 <button onClick={train} disabled={s.training} data-testid="lab-train-epoch-button"
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-purple-500/15 text-purple-200 border border-purple-500/30 text-xs hover:bg-purple-500/25 disabled:opacity-50 transition-colors">
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white/[0.06] text-zinc-100 border border-white/20 text-xs hover:bg-white/[0.06] disabled:opacity-50 transition-colors">
                   {s.training ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />} {s.training ? `Treinando ${pct}%` : "Treinar"}
                 </button>
               </div>
             </div>
-            {s.training && <div className="h-1 rounded bg-white/5 mb-3 overflow-hidden"><div className="h-full bg-purple-400 transition-all" style={{ width: `${pct}%` }} /></div>}
+            {s.training && <div className="h-1 rounded bg-white/5 mb-3 overflow-hidden"><div className="h-full bg-zinc-200 transition-all" style={{ width: `${pct}%` }} /></div>}
             <div className="h-64" data-testid="lab-loss-chart">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={s.losses}>
                   <CartesianGrid stroke="rgba(255,255,255,0.05)" />
                   <XAxis dataKey="step" stroke="#68687D" fontSize={11} />
                   <YAxis stroke="#68687D" fontSize={11} scale="log" domain={["auto", "auto"]} allowDataOverflow />
-                  <Tooltip contentStyle={{ background: "#181A26", border: "1px solid rgba(255,255,255,.1)", borderRadius: 8, fontSize: 12 }} />
-                  <Line type="monotone" dataKey="loss" stroke="#8338EC" strokeWidth={2} dot={false} isAnimationActive={false} />
+                  <Tooltip contentStyle={{ background: "#303030", border: "1px solid rgba(255,255,255,.1)", borderRadius: 8, fontSize: 12 }} />
+                  <Line type="monotone" dataKey="loss" stroke="#ECECEC" strokeWidth={2} dot={false} isAnimationActive={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
             <p className="text-xs text-zinc-500 mt-3">Dataset atual: {s.corpus_chars.toLocaleString("pt-BR")} caracteres · {s.corpus_contributions} contribuições suas. Treino roda em CPU no servidor.</p>
           </section>
 
-          <section className="lg:col-span-2 p-5 rounded-2xl bg-[#12141D] border border-white/[0.07] flex flex-col">
+          <section className="lg:col-span-2 p-5 rounded-2xl bg-[#2A2A2A] border border-white/[0.07] flex flex-col">
             <h2 className="font-display text-lg mb-3">Inferência pura</h2>
             <textarea data-testid="lab-prompt-input" value={prompt} onChange={(e) => setPrompt(e.target.value)} rows={3}
-              className="w-full px-3 py-2 rounded-lg bg-[#181A26] border border-white/10 text-sm font-mono outline-none focus:border-purple-400/50" />
+              className="w-full px-3 py-2 rounded-lg bg-[#303030] border border-white/10 text-sm font-mono outline-none focus:border-white/20" />
             <div className="flex items-center gap-3 mt-3">
               <label className="text-xs text-zinc-500">Temperatura {temp}</label>
-              <input type="range" min="0.1" max="1.5" step="0.1" value={temp} onChange={(e) => setTemp(+e.target.value)} className="flex-1 accent-purple-400" data-testid="lab-temperature" />
+              <input type="range" min="0.1" max="1.5" step="0.1" value={temp} onChange={(e) => setTemp(+e.target.value)} className="flex-1 accent-zinc-200" data-testid="lab-temperature" />
               <button onClick={generate} disabled={gen} data-testid="lab-generate-text-button"
                 className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs hover:bg-white/10 disabled:opacity-50">
                 {gen ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />} Gerar
               </button>
             </div>
-            <pre data-testid="lab-generated-text" className="mt-4 flex-1 min-h-32 p-3 rounded-lg bg-black/30 border border-white/5 text-xs text-purple-100 whitespace-pre-wrap font-mono">{out || "A saída da rede aparece aqui."}</pre>
+            <pre data-testid="lab-generated-text" className="mt-4 flex-1 min-h-32 p-3 rounded-lg bg-black/30 border border-white/5 text-xs text-zinc-100 whitespace-pre-wrap font-mono">{out || "A saída da rede aparece aqui."}</pre>
           </section>
         </div>
 
-        <section className="mt-5 p-5 rounded-2xl bg-[#12141D] border border-white/[0.07]">
+        <section className="mt-5 p-5 rounded-2xl bg-[#2A2A2A] border border-white/[0.07]">
           <h2 className="font-display text-lg">Ensinar com seus dados</h2>
           <p className="text-xs text-zinc-500 mt-1 mb-3">Cole textos ou diálogos no formato "Usuário: … / Adam: …". Eles entram no dataset do próximo treino.</p>
           <textarea data-testid="lab-corpus-input" value={corpus} onChange={(e) => setCorpus(e.target.value)} rows={4} placeholder={"Usuário: Qual o melhor time de BH?\nAdam: ..."}
-            className="w-full px-3 py-2 rounded-lg bg-[#181A26] border border-white/10 text-sm font-mono outline-none focus:border-purple-400/50" />
+            className="w-full px-3 py-2 rounded-lg bg-[#303030] border border-white/10 text-sm font-mono outline-none focus:border-white/20" />
           <button onClick={addCorpus} disabled={corpus.trim().length < 20} data-testid="lab-corpus-add-button"
             className="mt-3 flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 border border-white/10 text-xs hover:bg-white/10 disabled:opacity-40">
             <Plus className="w-3.5 h-3.5" /> Adicionar ao dataset

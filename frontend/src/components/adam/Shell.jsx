@@ -8,12 +8,12 @@ export default function Shell() {
   const [open, setOpen] = useState(false);
   const loc = useLocation();
   return (
-    <div className="grain h-[100dvh] flex bg-[#090A0F] text-zinc-100 overflow-hidden">
-      <aside className="hidden md:flex w-80 shrink-0 border-r border-white/5 bg-[#0D0E15]">
+    <div className="h-[100dvh] flex bg-[#212121] text-zinc-100 overflow-hidden">
+      <aside className="hidden md:flex w-[268px] shrink-0 bg-[#171717]">
         <Sidebar />
       </aside>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="p-0 w-80 bg-[#0D0E15] border-white/10">
+        <SheetContent side="left" className="p-0 w-[280px] bg-[#171717] border-white/10">
           <Sidebar onNavigate={() => setOpen(false)} />
         </SheetContent>
       </Sheet>

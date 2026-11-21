@@ -33,8 +33,8 @@ function CodeView({ code, building }) {
   const ref = useRef(null);
   useEffect(() => { if (building && ref.current) ref.current.scrollTop = ref.current.scrollHeight; }, [code, building]);
   return (
-    <pre ref={ref} className="h-full overflow-auto scroll-thin p-4 text-[12.5px] leading-relaxed text-zinc-200 bg-[#0c0d14]" data-testid="artifact-code-view">
-      <code>{code}</code>{building && <span className="inline-block w-2 h-4 align-middle bg-[#F4A261] animate-pulse ml-0.5" />}
+    <pre ref={ref} className="h-full overflow-auto scroll-thin p-4 text-[12.5px] leading-relaxed text-zinc-200 bg-[#0D0D0D]" data-testid="artifact-code-view">
+      <code>{code}</code>{building && <span className="inline-block w-2 h-4 align-middle bg-zinc-200 animate-pulse ml-0.5" />}
     </pre>
   );
 }
@@ -79,13 +79,13 @@ export default function ArtifactPanel({ artifact, messages, busy, onClose }) {
   const disabled = r.building || !code;
 
   return (
-    <aside className="fixed inset-0 z-[60] md:static md:z-auto md:w-[50%] md:max-w-[960px] shrink-0 flex flex-col bg-[#0B0C12] md:border-l border-white/10 slide-in" data-testid="artifact-panel">
+    <aside className="fixed inset-0 z-[60] md:static md:z-auto md:w-[50%] md:max-w-[960px] shrink-0 flex flex-col bg-[#171717] md:border-l border-white/10 slide-in" data-testid="artifact-panel">
       <div className="h-14 shrink-0 flex items-center gap-2 px-3 border-b border-white/5">
         <div className="min-w-0 flex-1 pl-1">
           <p className="text-sm text-white truncate" data-testid="artifact-title">{siteTitle(code)}</p>
           <p className="text-[11px] font-mono text-zinc-500 flex items-center gap-1.5" data-testid="artifact-status">
-            {r.building ? <><Loader2 className="w-3 h-3 animate-spin text-[#F4A261]" /><span className="text-[#F4A261]">Construindo… {lines} linhas</span></>
-              : r.waiting ? <><Loader2 className="w-3 h-3 animate-spin" /> Finalizando…</> : <><span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Pronto · {lines} linhas</>}
+            {r.building ? <><Loader2 className="w-3 h-3 animate-spin text-zinc-100" /><span className="text-zinc-100">Construindo… {lines} linhas</span></>
+              : r.waiting ? <><Loader2 className="w-3 h-3 animate-spin" /> Finalizando…</> : <><span className="w-1.5 h-1.5 rounded-full bg-zinc-200" /> Pronto · {lines} linhas</>}
           </p>
         </div>
         <button onClick={onClose} data-testid="artifact-close-button" className="p-2 rounded-lg hover:bg-white/10 text-zinc-400" title="Fechar"><X className="w-4 h-4" /></button>
@@ -96,7 +96,7 @@ export default function ArtifactPanel({ artifact, messages, busy, onClose }) {
         <span className="flex-1" />
         {tab === "preview" && <button onClick={() => setMobile(!mobile)} data-testid="artifact-device-toggle" className={btn} title="Celular / Desktop">{mobile ? <Monitor className="w-3.5 h-3.5" /> : <Smartphone className="w-3.5 h-3.5" />}</button>}
         {tab === "code" && code && <CopyBtn text={code} />}
-        <button onClick={open} disabled={disabled} data-testid="artifact-open-browser-button" className={`${btn} text-emerald-200 border-[#2A9D8F]/40`}><ExternalLink className="w-3.5 h-3.5" /> Abrir no navegador</button>
+        <button onClick={open} disabled={disabled} data-testid="artifact-open-browser-button" className={`${btn} text-zinc-100 border-white/20`}><ExternalLink className="w-3.5 h-3.5" /> Abrir no navegador</button>
         <button onClick={act(() => setGh(true))} disabled={disabled} data-testid="artifact-github-button" className={btn}><Github className="w-3.5 h-3.5" /> GitHub</button>
         <button onClick={act((f) => downloadFile(api, f))} disabled={disabled} data-testid="artifact-download-button" className={btn}><Download className="w-3.5 h-3.5" /></button>
       </div>
@@ -104,9 +104,9 @@ export default function ArtifactPanel({ artifact, messages, busy, onClose }) {
         {!code && <div className="h-full flex items-center justify-center text-xs text-zinc-500 gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Preparando…</div>}
         {code && tab === "code" && <CodeView code={code} building={r.building} />}
         {code && tab === "preview" && (
-          <div className="h-full bg-[#0c0d14] p-2 relative">
+          <div className="h-full bg-[#0D0D0D] p-2 relative">
             <SiteFrame html={preview} mobile={mobile} height="100%" name={siteTitle(code)} />
-            {r.building && <span className="absolute top-4 right-4 text-[10px] font-mono px-2 py-1 rounded bg-black/70 text-[#F4A261]">prévia ao vivo</span>}
+            {r.building && <span className="absolute top-4 right-4 text-[10px] font-mono px-2 py-1 rounded bg-black/70 text-zinc-100">prévia ao vivo</span>}
           </div>
         )}
       </div>

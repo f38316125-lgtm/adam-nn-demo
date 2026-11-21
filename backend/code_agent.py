@@ -6,7 +6,7 @@ import uuid
 from emergentintegrations.llm.chat import LlmChat, StreamDone, TextDelta, ToolCallReady, UserMessage
 
 SESSIONS: dict = {}
-MAX_STEPS = 60
+MAX_STEPS = 200
 TTL = 10800
 
 SYSTEM = """Você é Adam, assistente de programação criado por Felipe Hudson (Belo Horizonte, Brasil), rodando dentro do VS Code do usuário.
@@ -69,12 +69,13 @@ def _next(s: dict, message: str) -> dict:
     return {"session_id": s["id"], "done": True, "message": message or "Pronto.", "step": s["steps"], "action": None}
 
 
-async def start(api_key: str, model: tuple, user_id: str, task: str, context: str, session_id: str = None, extra: str = "") -> dict:
+async def start(api_key: str, model: tuple, user_id: str, task: str, context: str, session_id: str = None, extra: str = "",
+                system: str = "", tools: list = None) -> dict:
     _gc()
     s = SESSIONS.get(session_id or "")
     if not s or s["user_id"] != user_id or s["pending"]:
         sid = str(uuid.uuid4())
-        chat = LlmChat(api_key=api_key, session_id=sid, system_message=SYSTEM + extra).with_model(*model).with_tools(TOOLS, tool_choice="auto")
+        chat = LlmChat(api_key=api_key, session_id=sid, system_message=(system or SYSTEM) + extra).with_model(*model).with_tools(tools or TOOLS, tool_choice="auto")
         s = {"id": sid, "user_id": user_id, "chat": chat, "pending": [], "steps": 0, "created": time.time()}
         SESSIONS[sid] = s
     s["steps"] = 0
@@ -95,7 +96,7 @@ async def step(sid: str, user_id: str, tool_call_id: str, result: dict) -> dict:
     elif result.get("error"):
         content = f"Erro: {str(result['error'])[:2000]}"
     else:
-        content = str(result.get("output", ""))[:40000] or "(sem saída)"
+        content = str(result.get("output", ""))[:45000] or "(sem saída)"
     s["chat"].add_tool_result(tc.id, content)
     if s["pending"]:
         return _next(s, "")

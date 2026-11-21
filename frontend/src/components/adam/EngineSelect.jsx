@@ -5,25 +5,22 @@ import { useAdam } from "@/lib/adamContext";
 
 export default function EngineSelect() {
   const { engine, setEngine } = useAdam();
-  const cur = ENGINES[engine];
   return (
     <DropdownMenu>
       <DropdownMenuTrigger data-testid="engine-selector-dropdown"
-        className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors ${cur.cls}`}>
-        <span className="w-1.5 h-1.5 rounded-full" style={{ background: cur.dot }} />
-        {cur.label}
-        <ChevronDown className="w-3.5 h-3.5 opacity-70" />
+        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[15px] font-medium text-zinc-100 hover:bg-white/[0.06] outline-none transition-colors">
+        {ENGINES[engine].label}
+        <ChevronDown className="w-4 h-4 text-zinc-500" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-80 bg-[#12141D] border-white/10 p-1.5">
+      <DropdownMenuContent align="start" className="w-80 bg-[#2F2F2F] border-white/10 p-1.5 rounded-xl shadow-xl">
         {Object.entries(ENGINES).map(([key, e]) => (
           <DropdownMenuItem key={key} data-testid={`engine-option-${key}`} onClick={() => setEngine(key)}
-            className="flex items-start gap-3 p-3 rounded-lg cursor-pointer focus:bg-white/5">
-            <span className="mt-1.5 w-2 h-2 rounded-full shrink-0" style={{ background: e.dot }} />
+            className="flex items-start gap-3 p-3 rounded-lg cursor-pointer focus:bg-white/[0.06]">
             <div className="flex-1">
-              <p className="text-sm text-white">{e.label}</p>
+              <p className="text-sm text-zinc-100">{e.label}</p>
               <p className="text-xs text-zinc-500 mt-0.5">{e.sub}</p>
             </div>
-            {engine === key && <Check className="w-4 h-4 text-[#F4A261]" />}
+            {engine === key && <Check className="w-4 h-4 text-zinc-100 mt-0.5" />}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

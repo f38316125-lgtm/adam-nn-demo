@@ -53,8 +53,8 @@ export default function Composer({ onSend, busy }) {
   };
 
   return (
-    <div className="sticky bottom-0 w-full px-3 sm:px-4 pb-4 pt-2 bg-gradient-to-t from-[#090A0F] via-[#090A0F] to-transparent">
-      <div className="mx-auto max-w-3xl bg-[#12141D]/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl p-2.5 sm:p-3 transition-colors focus-within:border-[#F4A261]/50">
+    <div className="sticky bottom-0 w-full px-3 sm:px-4 pb-4 pt-2 bg-[#212121]">
+      <div className="mx-auto max-w-3xl bg-[#303030] rounded-[28px] shadow-[0_0_0_1px_rgba(255,255,255,0.04)] px-3 py-2.5">
         {files.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-2" data-testid="attachments-list">
             {files.map((f) => (
@@ -81,13 +81,13 @@ export default function Composer({ onSend, busy }) {
             data-testid="image-generate-trigger" title="Gerar imagem" className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 disabled:opacity-30 transition-colors">
             <Sparkles className="w-4 h-4" />
           </button>
-          <span className="ml-auto hidden sm:inline text-[10px] font-mono text-zinc-600 mr-2">{rec ? "Gravando… clique para enviar" : "Enter envia · Shift+Enter quebra linha"}</span>
+          <span className="ml-auto hidden sm:inline text-xs text-zinc-500 mr-2">{rec ? "Gravando… clique para enviar" : "Enter envia · Shift+Enter quebra linha"}</span>
           <button onClick={toggleMic} disabled={busy || transcribing} data-testid="voice-record-button" title={rec ? "Parar e enviar" : "Falar com o Adam"}
-            className={`p-2 rounded-xl transition-colors disabled:opacity-30 ${rec ? "bg-rose-500/20 text-rose-300 animate-pulse" : "text-zinc-400 hover:text-white hover:bg-white/5"}`}>
+            className={`p-2 rounded-xl transition-colors disabled:opacity-30 ${rec ? "bg-white text-black animate-pulse" : "text-zinc-400 hover:text-white hover:bg-white/5"}`}>
             {transcribing ? <Loader2 className="w-4 h-4 animate-spin" /> : rec ? <Square className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </button>
           <button onClick={submit} disabled={!text.trim() || busy || uploading} data-testid="chat-send-button"
-            className="p-2 rounded-xl bg-gradient-to-r from-[#F4A261] to-[#E07A5F] text-white hover:opacity-90 disabled:opacity-30 transition-opacity">
+            className="w-9 h-9 flex items-center justify-center rounded-full bg-white text-black hover:bg-zinc-200 disabled:bg-zinc-600 disabled:text-zinc-400 transition-colors">
             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowUp className="w-4 h-4" />}
           </button>
         </div>
