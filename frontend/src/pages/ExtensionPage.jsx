@@ -34,7 +34,7 @@ export default function ExtensionPage() {
   };
   return (
     <div className="flex-1 overflow-y-auto scroll-thin">
-      <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14">
+      <div className="max-w-5xl mx-auto px-5 sm:px-8 py-10">
         <PageHeader eyebrow="Edge Agent · Chrome" title="O Adam no controle do seu navegador"
           subtitle="Uma extensão do Chrome que deixa o Adam ver a aba atual, clicar, digitar e navegar para cumprir suas tarefas, sempre com a sua permissão.">
           <button onClick={download} data-testid="extension-download-button"
@@ -44,7 +44,7 @@ export default function ExtensionPage() {
         </PageHeader>
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-12">
           {CAPS.map(({ icon: Icon, t, d }) => (
-            <div key={t} className="p-5 rounded-xl bg-white/[0.025] border border-white/[0.07]">
+            <div key={t} className="p-5 rounded-xl bg-[#2A2A2A] border border-white/[0.06]">
               <Icon className="w-5 h-5 text-zinc-100 mb-3" />
               <p className="font-display">{t}</p>
               <p className="text-xs text-zinc-500 mt-1 leading-relaxed">{d}</p>

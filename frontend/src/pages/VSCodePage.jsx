@@ -36,7 +36,7 @@ export default function VSCodePage() {
   };
   return (
     <div className="flex-1 overflow-y-auto scroll-thin">
-      <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14">
+      <div className="max-w-5xl mx-auto px-5 sm:px-8 py-10">
         <PageHeader eyebrow="Code Agent · VS Code" title="O Adam dentro do seu editor"
           subtitle="Um agente completo dentro do VS Code: lê e entende o projeto inteiro, implementa, corrige, redesenha, roda código, acessa o banco e desfaz alterações.">
           <button onClick={download} data-testid="vscode-download-button"

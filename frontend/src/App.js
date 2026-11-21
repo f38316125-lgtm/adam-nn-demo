@@ -13,9 +13,8 @@ import ApiPage from "@/pages/ApiPage";
 import SettingsPage from "@/pages/SettingsPage";
 import FilesPage from "@/pages/FilesPage";
 import KnowledgePage from "@/pages/KnowledgePage";
-import ExtensionPage from "@/pages/ExtensionPage";
+import ExtensionsPage from "@/pages/ExtensionsPage";
 import WidgetPage from "@/pages/WidgetPage";
-import VSCodePage from "@/pages/VSCodePage";
 
 function Protected() {
   return (
@@ -40,8 +39,9 @@ function App() {
             <Route path="/chat/:id" element={<ChatPage />} />
             <Route path="/memoria" element={<MemoryPage />} />
             <Route path="/conhecimento" element={<KnowledgePage />} />
-            <Route path="/extensao" element={<ExtensionPage />} />
-            <Route path="/vscode" element={<VSCodePage />} />
+            <Route path="/extensoes" element={<ExtensionsPage />} />
+            <Route path="/extensao" element={<Navigate to="/extensoes?tab=chrome" replace />} />
+            <Route path="/vscode" element={<Navigate to="/extensoes?tab=vscode" replace />} />
             <Route path="/widget" element={<WidgetPage />} />
             <Route path="/arquivos" element={<FilesPage />} />
             <Route path="/laboratorio" element={<LabPage />} />

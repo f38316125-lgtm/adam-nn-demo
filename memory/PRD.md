@@ -1,56 +1,12 @@
-# Adam AI — PRD
+# Adam — PRD
+Original: clone https://github.com/felp0946-stack/adam-nn.git and run it without bugs. Later: ChatGPT-like redesign (no gradients/colored glows/emojis), logout button, VS Code agent as full Emergent replacement, single "Extensões" page.
 
-## Problema original
-Construir "Adam", IA própria estilo ChatGPT/Claude/Manus, criada por Felipe Hudson (19 anos, Belo Horizonte, BR). Chat, memória, arquivos, geração de PDF/Word/Excel/código/sites, visão, geração de imagens, pesquisa web, controle de navegador, voz, API/plugin para integração, rede neural própria.
-
-## Escolhas do usuário
-- Cérebro: modelo forte agora (Claude Sonnet 4.5 via chave universal), trocável por servidor local (Ollama) + mini rede neural própria treinada do zero (PyTorch).
-- V1: chat c/ memória e histórico, ler arquivos/imagens, gerar arquivos, gerar imagens.
-- Login: email + senha (Clerk gerenciado pela Emergent).
-- API própria com chaves.
-- Usuário NÃO quer testing agent/reviewer — ele mesmo testa.
-
-## Arquitetura
-- Backend FastAPI (server.py), neural.py (AdamNano Transformer 0.83M params, tokenizer de caracteres próprio, pesos salvos no Mongo), files_util.py (PDF/DOCX/XLSX/código + extração), web_tools.py (pesquisa via Brave HTML, leitura de sites com proteção SSRF), storage.py (Emergent Object Storage), clerk_auth.py.
-- Frontend React: Chat (SSE streaming, seletor de motor, anexos, cartões de arquivos/imagens/links), Memória, Arquivos, Laboratório Neural, API & Chaves, Configurações.
-- Contexto: últimas 16 mensagens + resumo progressivo automático das antigas (não estoura janela de contexto).
-
-## Implementado (2026-11-21) — iteração 4
-- Modo Ligação: botão "Ligar" no chat; detecção automática de fala/silêncio, transcrição, resposta falada, interrupção falando por cima, mudo.
-- Extensão v1.1: agente roda no service worker (segundo plano, aba fixa da tarefa, até 80 passos), permissão por notificação com botões, notificação ao concluir.
-- Voz brasileira ElevenLabs (eleven_multilingual_v2, vozes PT-BR da biblioteca, escolha em Configurações) com fallback OpenAI TTS. Requer ELEVENLABS_API_KEY.
-
-## Implementado (2026-11-21) — iteração 3
-- Aprendizado contínuo do AdamNano em segundo plano (loop a cada 5 min) com mensagens do usuário, memórias, docs da base e respostas do Servidor Local. Respostas do Claude NÃO entram (termos da Anthropic). Opção em Configurações.
-- RAG: Base de Conhecimento (/conhecimento) com índice de texto Mongo (português), trechos injetados no prompt e citados ("Consultou").
-- System prompt com método de raciocínio passo a passo.
-- Extensão Chrome MV3 (painel lateral, permissão por ação) + API /api/v1/agent/start|step|stop; zip em /api/extension/download.
-- Widget embutível: /api/widget.js + /api/widget/chat (chaves adam_pub_, domínios permitidos, limite 20 msg/min, sem acesso a memórias).
-- Prévia ao vivo de sites .html no chat (iframe sandbox, modo celular, tela cheia).
-- Voz: microfone → Whisper (whisper-1) → resposta falada (tts-1, voz configurável), botão Ouvir.
-
-## Implementado (2026-11-21)
-- Chat streaming com 3 motores (pro / neural / local Ollama), histórico, renomear/excluir.
-- Ferramentas do Adam: criar_arquivo, gerar_imagem (Gemini Nano Banana), salvar_memoria, pesquisar_web, abrir_site, abrir_no_navegador (abre aba no navegador do usuário).
-- Upload: imagens (visão), PDF, DOCX, XLSX, texto/código.
-- API v1: POST /api/v1/chat, GET /api/v1/files/{id} com chaves adam_live_ (hash sha256).
-- Laboratório: treinar, curva de loss, gerar texto, adicionar dados ao dataset.
+## Done
+- 2026-11 Cloned & ran; Clerk (Emergent-managed) + ElevenLabs; torch pin fixed for deploy.
+- 2026-11 Redesign ChatGPT-style (Geist, neutral greys), vertical sidebar, user menu, Sair button, clean auth page.
+- 2026-11 VS Code extension v2.0 (tools.js, executor.js: project map, atomic multi-file changes, undo checkpoints, .env, background processes, DB queries, autonomy modes). Server accepts system/tools, MAX_STEPS 200.
+- 2026-11 /extensoes page with VS Code | Chrome tabs (old /vscode and /extensao redirect). No admin/roles: every user sees all pages.
 
 ## Backlog
-- P0: Agente local (Adam Edge Agent – extensão Chrome/app desktop) para clicar/digitar no navegador e computador do usuário com permissão.
-- P1: Voz (STT/TTS), edição de imagens, preview ao vivo de sites gerados, execução de Python em sandbox.
-- P1: API de busca dedicada (pesquisa atual é scraping e pode ser limitada).
-- P2: Plugin/widget embutível, fine-tuning com GPU, tokenizer BPE, modelo maior.
-
-## Implementado (2026-11-21) — iteração 5
-- Sites gerados: abas Prévia/Código, botão "Abrir no navegador" (link público /api/s/{token}, isolado com CSP sandbox), envio ao GitHub. Blocos ```html no chat ganham Prévia/Abrir/GitHub.
-- GitHub: token pessoal em Configurações; POST /api/github/push cria repo (se não existir), faz commit do arquivo e opcionalmente publica no GitHub Pages.
-- Histórico: ícones de navegação compactos, histórico ocupa a lateral, busca (título + conteúdo das mensagens) com filtros de período e motor, agrupado por data, barra de rolagem maior.
-- Extensão VS Code (.vsix em /vscode → /api/vscode/download): agente lê/busca/edita arquivos, lê diagnósticos, roda comandos; diff + aprovação antes de cada edição/comando. Cérebro: Adam Pro (/api/v1/code/*) com Ollama local (qwen2.5, localhost:11434) de reserva.
-
-## Implementado (2026-11-21) — iteração 6 (bug: sites sem feedback / resposta perdida)
-- Causa: site gerado via argumentos de ferramenta (nada era transmitido → conexão caía por inatividade) e a geração estava presa à requisição HTTP (sair do chat cancelava e nada era salvo).
-- Correção: geração em segundo plano (Run + RUNS), SSE com heartbeat, retomada via GET /api/chat/runs/{cid}/stream; conversa retorna "running".
-- Sites agora são escritos ao vivo em bloco ```html; servidor salva o arquivo automaticamente (source=chat_block).
-- Painel lateral estilo Emergent (ArtifactPanel): Construindo… N linhas, Código ao vivo, Pré-visualização (troca automática ao terminar), Abrir no navegador, GitHub, Baixar. Card "Pré-visualização" no chat.
-- Usuário pediu: NUNCA chamar testing agent.
+- P1: streaming in VS Code panel; per-file approval in batch changes
+- P2: light theme

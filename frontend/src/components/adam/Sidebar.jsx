@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import { useClerk, useUser } from "@clerk/react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Activity, BookOpen, Brain, Chrome, Code, Cpu, FolderOpen, KeyRound, LogOut, Plus, Search, SlidersHorizontal, SquarePen, SquareTerminal, Trash2, X } from "lucide-react";
+import { Activity, BookOpen, Brain, Code, Cpu, FolderOpen, KeyRound, LogOut, Plus, Puzzle, Search, SlidersHorizontal, SquarePen, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { useAdam } from "@/lib/adamContext";
 import { ENGINES, useApi } from "@/lib/api";
@@ -14,8 +14,7 @@ const NAV = [
   { to: "/laboratorio", label: "Laboratório Neural", icon: Activity, id: "lab" },
 ];
 const MORE = [
-  { to: "/vscode", label: "Extensão VS Code", icon: SquareTerminal, id: "vscode" },
-  { to: "/extensao", label: "Extensão Chrome", icon: Chrome, id: "extension" },
+  { to: "/extensoes", label: "Extensões", icon: Puzzle, id: "extensions" },
   { to: "/widget", label: "Widget para Sites", icon: Code, id: "widget" },
   { to: "/api", label: "API & Chaves", icon: KeyRound, id: "api" },
   { to: "/configuracoes", label: "Configurações", icon: Cpu, id: "settings" },
